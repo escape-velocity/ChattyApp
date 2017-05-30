@@ -6,6 +6,19 @@ import MessageList from './MessageList.jsx';
 
 
 class App extends Component {
+
+  componentDidMount() {
+  console.log("componentDidMount <App />");
+  setTimeout(() => {
+    console.log("Simulating incoming message");
+    // Add a new message to the list of messages in the data store
+    const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
+    const messages = this.state.messages.concat(newMessage)
+    // Update the state of the app component.
+    // Calling setState will trigger a call to render() in App and all child components.
+    this.setState({messages: messages})
+  }, 3000);
+}
   constructor(props) {
     super(props);
 
@@ -23,6 +36,17 @@ class App extends Component {
       }
       ]   
     };
+    this.addNewMessage = this.addNewMessage.bind(this);
+  }
+
+  addNewMessage(name, content) {
+    const message = {
+      id: this.state.messages.length + 1,
+      username: name,
+      content: content
+    };
+    const newMessages = this.state.messages.concat(message);
+    this.setState({messages: newMessages});
   }
 
   render() {
@@ -32,9 +56,10 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages = {this.state.messages} />
-        <ChatBar user={this.state.currentUser.name}/>
+        <ChatBar user={this.state.currentUser.name} newMessage={this.addNewMessage}/>
       </div>
      );
   }
 }
+
 export default App;
