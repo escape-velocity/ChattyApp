@@ -11,7 +11,8 @@ export default class App extends Component {
     this.state = {
       currentUser: { name: "Anonymous" },
       messages: [], // messages coming from the server will be stored here as they arrive
-      onlineUsers: 0
+      onlineUsers: 0,
+      userColor: "black"
     };
 
     this.addNewMessage = this.addNewMessage.bind(this);
@@ -23,7 +24,8 @@ export default class App extends Component {
     const message = {
       type: "incomingMessage",
       username: name,
-      content
+      content,
+      userColor: this.state.userColor
     };
     this.socket.send(JSON.stringify(message));
   }
@@ -60,7 +62,10 @@ export default class App extends Component {
             messages: this.state.messages.concat(message)
           });
         case "onlineUsers":
-          return this.setState({ onlineUsers: message.content });
+          return this.setState({
+            onlineUsers: message.content,
+            userColor: message.userColor
+          });
         default:
           // throw new Error("Unknown event type " + message.type);
           console.error(`Unknown message type ${message.type}`);

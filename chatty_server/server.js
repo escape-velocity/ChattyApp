@@ -34,6 +34,11 @@ wss.broadcast = function broadcast(data) {
 //   //ws.send.JSON.parse();
 
 // });
+function pickColor() {
+  var colors = ["#5dd1a1", "#d15db4", "#482cd4", "#fa075d"];
+  var random_color = colors[Math.floor(Math.random() * colors.length)];
+  return random_color;
+}
 
 function handleMessage(message) {
   const data = JSON.parse(message);
@@ -41,18 +46,19 @@ function handleMessage(message) {
   wss.broadcast(data);
 }
 
-function updateOnlineCount() {
+function updateOnlineCount(userColor) {
   wss.broadcast({
     type: "onlineUsers",
-    content: wss.clients.size
+    content: wss.clients.size,
+    userColor: userColor
   });
 }
 
 function handleConnection(client) {
   console.log("New client connected!");
   console.log("We are at " + wss.clients.size + " clients!");
-
-  updateOnlineCount();
+  const userColor = pickColor();
+  updateOnlineCount(userColor);
 
   client.on("message", handleMessage);
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
