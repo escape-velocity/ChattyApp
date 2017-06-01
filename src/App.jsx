@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
 import Message from './Message.jsx';
 import MessageList from './MessageList.jsx';
+import NavBar from './NavBar.jsx';
 
 const uuidV4 = require('uuid/v4');
 
@@ -11,8 +12,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: "Bob"},
-      messages: [] // messages coming from the server will be stored here as they arrive
+      currentUser: {name: "Anonymous"},
+      messages: [], // messages coming from the server will be stored here as they arrive
+      onlineUsers: 0
     };
 
     this.addNewMessage = this.addNewMessage.bind(this);
@@ -58,10 +60,11 @@ class App extends Component {
       switch(message.type) {
       case "incomingMessage":
         return (this.setState({messages: this.state.messages.concat(message)}));  
-        break;
       case "incomingNotification":
         return (this.setState({messages: this.state.messages.concat(message)}));
-        break;
+      case "onlineUsers":
+        this.setState({ onlineUsers: message.content });
+        return;
       default: 
         throw new Error("Unknown event type " + message.type);
       }
@@ -71,9 +74,7 @@ class App extends Component {
   render() {
     return (
       <div className= 'messagecontainer'>
-        <nav className="navbar">
-          <a href="/" className="navbar-brand">Chatty</a>
-        </nav>
+        <NavBar onlineUsers = {this.state.onlineUsers} />
         <MessageList messages = {this.state.messages} />
         <ChatBar user={ this.state.currentUser.name } 
            newUsername={ this.newUsername }
