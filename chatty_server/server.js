@@ -16,24 +16,48 @@ const server = express()
 const wss = new SocketServer({ server });
 
 wss.broadcast = function broadcast(data) {
+  console.log('We are at ' + wss.clients.size + ' clients!');
+  const packet = JSON.stringify(data);
   wss.clients.forEach(function each(client) {
-      client.send(data);
-
+    client.send(packet);
   });
 };
 
-// Set up a callback that will run when a client connects to the server
-// When a client connects they are assigned a socket, represented by
-// the ws parameter in the callback.
-wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(message) {
-    wss.clients.forEach(function each(client) {
-    client.send(message);
-    });
+// // Set up a callback that will run when a client connects to the server
+// // When a client connects they are assigned a socket, represented by
+// // the ws parameter in the callback.
+// wss.on('connection', function connection(ws) {
 
-});
+//   //ws.send.JSON.parse();
+  
+// });
 
-  //ws.send.JSON.parse();
+function handleMessage(message) {
+  // const data = JSON.parse(message);
+  wss.broadcast(message);
+}
+
+function updateOnlineCount() {
+  wss.broadcast({
+    type: 'onlineUsers',
+    content: wss.clients.size
+  });
+}
+
+function handleConnection(client) {
+  console.log('New client connected!');
+  console.log('We are at ' + wss.clients.size + ' clients!');
+
+  updateOnlineCount();
+
+  client.on('message', handleMessage);
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => console.log('Client disconnected'));
-});
+  client.on('close', () => { 
+    console.log('Client disconnected');
+    updateOnlineCount();
+  });
+  // client.send(sharedContent);
+  
+}
+
+wss.on('connection', handleConnection);
