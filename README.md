@@ -19,6 +19,6 @@ ChattyApp allows users to communicate with each other without having to register
 
 - Fork this repository, then clone your fork of this repository
 - Install dependencies using the `npm install` command
-- Start the WebSocket server using the `npm start` inside the chatty_server folder.
+- Start the WebSocket server using the `npm start` inside the chatty_server directory
 - Open a new tab and run the server.js simultaneously using `npm start` 
 - The app is served at <http://localhost:3000/> in your browser  
