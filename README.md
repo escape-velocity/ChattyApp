@@ -12,8 +12,8 @@ ChattyApp allows users to communicate with each other without having to register
 -  React DOM
 -  Express
 -  Webpack
--  [babel-loader](https://github.com/babel/babel-loader)
--  [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+-  [Babel-loader](https://github.com/babel/babel-loader)
+-  [Webpack-dev-server](https://github.com/webpack/webpack-dev-server)
 
 ## Getting Started
 
